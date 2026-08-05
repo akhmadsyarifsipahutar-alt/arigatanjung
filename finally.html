@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hi, Gorgeous ✨</title>
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to bottom, #020024, #0b1d51, #1e3c72, #4a90e2);
+            background-size: 100% 400%;
+            animation: skyMove 12s ease-in-out infinite alternate;
+            gap: 25px;
+            padding: 0 24px;
+        }
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: 
+                radial-gradient(2px 2px at 10% 20%, #fff, transparent), 
+                radial-gradient(2px 2px at 30% 70%, #fff, transparent), 
+                radial-gradient(1.5px 1.5px at 50% 30%, #fff, transparent), 
+                radial-gradient(2px 2px at 70% 15%, #fff, transparent), 
+                radial-gradient(2px 2px at 80% 60%, #fff, transparent), 
+                radial-gradient(1.5px 1.5px at 90% 40%, #fff, transparent), 
+                radial-gradient(2px 2px at 20% 85%, #fff, transparent), 
+                radial-gradient(2px 2px at 60% 80%, #fff, transparent);
+            animation: twinkle 2.5s ease-in-out infinite alternate;
+        }
+        .start-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(2, 0, 36, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            cursor: pointer;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .start-btn {
+            color: #ffd700;
+            font-family: 'Poppins', sans-serif;
+            font-size: 22px;
+            letter-spacing: 2px;
+            border: 2px solid rgba(255, 215, 0, 0.7);
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+            animation: pulse 1.5s infinite alternate;
+            user-select: none;
+            background: rgba(255, 215, 0, 0.03);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Container Slide */
+        .slide {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .typing-1 {
+            display: none;
+            position: relative;
+            z-index: 2;
+            color: #ffffff;
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 600;
+            font-style: italic;
+            text-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 30px rgba(74,144,226,0.5);
+            text-align: center;
+            max-width: 100%;
+        }
+        .typing-paragraph {
+            display: none;
+            position: relative;
+            z-index: 2;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 18px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            text-align: center;
+            max-width: 680px;
+            line-height: 1.8;
+            text-shadow: 0 0 10px rgba(255,255,255,0.2);
+        }
+        .highlight-name {
+            font-family: 'Playfair Display', serif;
+            color: #ffd700;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.3);
+            display: block;
+            margin: 12px 0;
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .active-1, .active-2 {
+            display: block;
+        }
+        .done {
+            animation: none !important;
+        }
+
+        /* Styling Tombol Open Message */
+        .btn-open {
+            opacity: 0;
+            pointer-events: none;
+            margin-top: 25px;
+            color: #ffd700;
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            letter-spacing: 1px;
+            border: 2px solid rgba(255, 215, 0, 0.7);
+            padding: 12px 28px;
+            border-radius: 50px;
+            background: rgba(255, 215, 0, 0.05);
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+            transition: all 0.5s ease;
+        }
+
+        .btn-open.show {
+            opacity: 1;
+            pointer-events: auto;
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        .btn-open:hover {
+            background: rgba(255, 215, 0, 0.2);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+            transform: scale(1.05);
+        }
+
+        /* Styling Slide Kedua */
+        .message-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 650px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .message-card p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 16px;
+            line-height: 1.8;
+            font-weight: 300;
+            text-align: left;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .highlight-text {
+            color: #ffd700;
+            font-weight: 600;
+        }
+
+        /* Tombol WhatsApp */
+        .btn-wa {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 12px 28px;
+            background-color: #25d366;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 50px;
+            box-shadow: 0 0 15px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-wa:hover {
+            background-color: #1ebe57;
+            box-shadow: 0 0 25px rgba(37, 211, 102, 0.7);
+            transform: scale(1.05);
+        }
+
+        @keyframes skyMove {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 0% 100%; }
+        }
+        @keyframes twinkle {
+            from { opacity: .4; }
+            to { opacity: 1; }
+        }
+        @keyframes pulse {
+            from { transform: scale(1); opacity: 0.8; }
+            to { transform: scale(1.05); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Overlay Tap to Start -->
+    <div class="start-overlay" id="startOverlay">
+        <div class="start-btn">Tap to Start 💖</div>
+    </div>
+
+    <!-- Slide 1: Ucapan & Ketikan -->
+    <div id="slide1" class="slide active">
+        <h1 class="typing-1" id="typingText1">Hi, Gorgeous ✨</h1>
+        <p class="typing-paragraph" id="typingText2">Congratulations on your bachelor's degree 🎓 now you are : <span class="highlight-name">Neha Mukerji Dewi Ariga Tanjung, S.H.</span> I'm incredibly proud of you.My apologize because of me your days were harder hopefully this situation will change for the better.</p>
+        <button id="openMsgBtn" class="btn-open">Open Message 💌</button>
+    </div>
+
+    <!-- Slide 2: Pesan Pribadi & Tombol WA -->
+    <div id="slide2" class="slide">
+        <div class="message-card">
+            <p>Hi, udah lama banget yah kita ga jumpa. Jarak kita juga udh kerasa makin jauh banget,but <span class="highlight-text">"I'm so proud of you"</span>, you can pass it after all of those happened.</p>
+            <p>Sebenarnya aku gatau mau ngomong apa, mungkin ini juga keliatan agak dikit alay sih buat ginian tapi se enggak nya ada sesuatu yang bisa aku kasih ke kamu. Maaf karna udah telat ngasih dan ngirimnya, aku sadar aku banyak bangat kurang nya jelek nya sebenernya aku emang ga pantas buat kamu tapi aku harap semua ini bakal lebih baik lagi kedepan nya,aku minta maaf banget sama kamu udah buat keadaannya jadi gini.</p>
+            <p>mungkin cuma itu aja yang bisa aku sampein sama kamu,oh iya kita udah lama banget yah ga komunikasi jadi ngerasa agak janggal,jadi kalo kamu mau balas pesan ini bisa klik tombol dibawah ini ya. <span class="highlight-text">I'm gonna marry you very soon.</span></p>
+
+            <!-- Link WhatsApp dengan tambahan "love you" -->
+            <a href="https://wa.me/6281376382840?text=Hello%20sayang%2C%20makasih%20yah%20Iyah%20udah%20lama%20kita%20ga%20chattan%20kan%20maaf%20yah%20aku%20juga%20kurang%20perhatian%20sama%20kamu%20selama%20ini%2Ctapi%20asal%20kamu%20tau%20aku%20disini%20sama%20adek%20nungguin%20kau%20plg%20love%20you%20%F0%9F%98%BD" target="_blank" class="btn-wa">
+                Balas via WhatsApp 💬
+            </a>
+        </div>
+    </div>
+
+    <!-- Audio Efek Ketikan -->
+    <audio id="typingSound" src="typing.mp3" preload="auto"></audio>
+
+    <script>
+        const overlay = document.getElementById("startOverlay");
+        const text1 = document.getElementById("typingText1");
+        const text2 = document.getElementById("typingText2");
+        const sound = document.getElementById("typingSound");
+        const openMsgBtn = document.getElementById("openMsgBtn");
+        const slide1 = document.getElementById("slide1");
+        const slide2 = document.getElementById("slide2");
+
+        function playTypingSound(characterCount, intervalTime, callback) {
+            let count = 0;
+            const audioInterval = setInterval(() => {
+                sound.currentTime = 0;
+                sound.play().catch(() => {});
+                count++;
+                if (count >= characterCount) {
+                    clearInterval(audioInterval);
+                    if (callback) callback();
+                }
+            }, intervalTime);
+        }
+
+        function toGraphemes(text) {
+            return [...text];
+        }
+
+        function typeHeading(element, speed, callback) {
+            const fullText = element.innerHTML;
+            const characters = toGraphemes(fullText);
+            element.innerHTML = "";
+            element.classList.add("active-1");
+            
+            let currentIdx = 0;
+            const typingInterval = setInterval(() => {
+                element.innerHTML += characters[currentIdx];
+                currentIdx++;
+                
+                if (currentIdx >= characters.length) {
+                    clearInterval(typingInterval);
+                    if (callback) callback();
+                }
+            }, speed);
+
+            playTypingSound(characters.length, speed);
+        }
+
+        function typeParagraph(element, speed, callback) {
+            const fullHTML = element.innerHTML;
+            element.innerHTML = "";
+            element.classList.add("active-2");
+            
+            let currentIdx = 0;
+            let tempHTML = "";
+            
+            const typingInterval = setInterval(()n => {
+                if (fullHTML.charAt(currentIdx) === "<") {
+                    const closingBracketIdx = fullHTML.indexOf(">", currentIdx);
+                    tempHTML += fullHTML.substring(currentIdx, closingBracketIdx + 1);
+                    currentIdx = closingBracketIdx + 1;
+                } else {
+                    const charCode = fullHTML.charCodeAt(currentIdx);
+                    if (charCode >= 0xD800 && charCode <= 0xDBFF) {
+                        tempHTML += fullHTML.substr(currentIdx, 2);
+                        currentIdx += 2;
+                    } else {
+                        tempHTML += fullHTML.charAt(currentIdx);
+                        currentIdx++;
+                    }
+                }
+                
+                element.innerHTML = tempHTML;
+                
+                if (currentIdx >= fullHTML.length) {
+                    clearInterval(typingInterval);
+                    if (callback) callback();
+                }
+            }, speed);
+
+            const cleanTextLength = fullHTML.replace(/<[^>]*>/g, "").length;
+            playTypingSound(cleanTextLength, speed);
+        }
+
+        // Jalankan animasi ketik saat overlay diklik
+        overlay.addEventListener("click", () => {
+            overlay.style.opacity = "0";
+            overlay.style.transform = "scale(1.1)";
+            setTimeout(() => overlay.remove(), 500);
+            
+            typeHeading(text1, 120, () => {
+                text1.classList.add("done");
+                setTimeout(() => {
+                    typeParagraph(text2, 60, () => {
+                        text2.classList.add("done");
+                        openMsgBtn.classList.add("show");
+                    });
+                }, 1000);
+            });
+        });
+
+        // Pindah ke Slide 2 saat tombol diklik
+        openMsgBtn.addEventListener("click", () => {
+            slide1.classList.remove("active");
+            setTimeout(() => {
+                slide2.classList.add("active");
+            }, 300);
+        });
+    </script>
+</body>
+</html>
